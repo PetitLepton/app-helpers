@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <script>
+        function download(endpoint, fileName, type) {
+            fetch(endpoint)
+                .then(async response => {
+                    blob = await response.blob();
+                    const newBlob = new Blob([blob], {
+                        "type": type
+                    });
+                    const objUrl = window.URL.createObjectURL(newBlob);
+
+                    let link = document.createElement('a');
+                    link.href = objUrl;
+                    link.download = fileName;
+                    link.click();
+
+                    // For Firefox it is necessary to delay revoking the ObjectURL.
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(objUrl);
+                    }, 250);
+                })
+        }
+
+        function downloadExcel() {
+            download("download-excel", "extract.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", )
+        };
+    </script>
+</head>
+
+<body>
+    <button onclick="downloadExcel()" data-trigger-update-context="false">Download Excel</button>
+</body>
+
+</html>
